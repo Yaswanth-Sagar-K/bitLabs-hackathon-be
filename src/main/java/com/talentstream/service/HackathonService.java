@@ -19,7 +19,11 @@ public class HackathonService {
 		return repo.save(h);
 	}
 
-	public List<Hackathon> listAll() {
+	public List<Hackathon> getAllByCreaterId(Long id) {
+		return repo.findByCreatorId(id).get();
+	}
+	
+	public List<Hackathon> getAll(){
 		return repo.findAll();
 	}
 

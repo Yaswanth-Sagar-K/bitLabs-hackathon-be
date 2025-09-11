@@ -5,6 +5,8 @@ import com.talentstream.entity.Hackathon;
 import com.talentstream.service.HackathonService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 @RestController
@@ -32,6 +34,11 @@ public class RecruiterController {
 		h.setPrizes(r.getPrizes());
 		h.setStatus(r.getStatus());
 		return service.create(h);
+	}
+	
+	@GetMapping("/{id}")
+	public List<Hackathon> getAll(@PathVariable Long id){
+		return service.getAllByCreaterId(id);
 	}
 
 	@PutMapping("/{id}")
