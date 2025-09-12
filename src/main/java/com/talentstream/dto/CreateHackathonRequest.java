@@ -1,15 +1,10 @@
 package com.talentstream.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class CreateHackathonRequest {
-	@NotNull
 	private Long creatorId;
-	@NotBlank
 	private String title;
-	@NotBlank
 	private String description;
 	private String bannerUrl;
 	private LocalDateTime startAt;
@@ -18,7 +13,6 @@ public class CreateHackathonRequest {
 	private String eligibility;
 	private String allowedTechnologies;
 	private String prizes;
-	@NotBlank
 	private String status;
 
 	public Long getCreatorId() {

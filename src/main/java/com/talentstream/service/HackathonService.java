@@ -1,5 +1,6 @@
 package com.talentstream.service;
 
+import com.talentstream.dto.CreateHackathonRequest;
 import com.talentstream.entity.Hackathon;
 import com.talentstream.repository.HackathonRepository;
 import org.springframework.stereotype.Service;
@@ -31,21 +32,42 @@ public class HackathonService {
 		return repo.findById(id);
 	}
 
-	public Hackathon update(Long id, Hackathon updated) {
-		return repo.findById(id).map(existing -> {
-			existing.setTitle(updated.getTitle());
-			existing.setDescription(updated.getDescription());
-			existing.setBannerUrl(updated.getBannerUrl());
-			existing.setStartAt(updated.getStartAt());
-			existing.setEndAt(updated.getEndAt());
-			existing.setInstructions(updated.getInstructions());
-			existing.setEligibility(updated.getEligibility());
-			existing.setAllowedTechnologies(updated.getAllowedTechnologies());
-			existing.setPrizes(updated.getPrizes());
-			existing.setStatus(updated.getStatus());
-			return repo.save(existing);
-		}).orElse(null);
+	public Hackathon update(Long id, CreateHackathonRequest updated) {
+	    return repo.findById(id).map(existing -> {
+	        if (updated.getTitle() != null) {
+	            existing.setTitle(updated.getTitle());
+	        }
+	        if (updated.getDescription() != null) {
+	            existing.setDescription(updated.getDescription());
+	        }
+	        if (updated.getBannerUrl() != null) {
+	            existing.setBannerUrl(updated.getBannerUrl());
+	        }
+	        if (updated.getStartAt() != null) {
+	            existing.setStartAt(updated.getStartAt());
+	        }
+	        if (updated.getEndAt() != null) {
+	            existing.setEndAt(updated.getEndAt());
+	        }
+	        if (updated.getInstructions() != null) {
+	            existing.setInstructions(updated.getInstructions());
+	        }
+	        if (updated.getEligibility() != null) {
+	            existing.setEligibility(updated.getEligibility());
+	        }
+	        if (updated.getAllowedTechnologies() != null) {
+	            existing.setAllowedTechnologies(updated.getAllowedTechnologies());
+	        }
+	        if (updated.getPrizes() != null) {
+	            existing.setPrizes(updated.getPrizes());
+	        }
+	        if (updated.getStatus() != null) {
+	            existing.setStatus(updated.getStatus());
+	        }
+	        return repo.save(existing);
+	    }).orElse(null);
 	}
+
 
 	public void delete(Long id) {
 		repo.deleteById(id);

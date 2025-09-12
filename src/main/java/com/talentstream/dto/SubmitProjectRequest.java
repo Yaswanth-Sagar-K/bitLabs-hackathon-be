@@ -1,16 +1,10 @@
 package com.talentstream.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class SubmitProjectRequest {
-	@NotNull
 	private Long registrationId;
-	@NotBlank
 	private String title;
-	@NotBlank
 	private String description;
-	@NotBlank
 	private String repoUrl;
 	private String docUrl;
 	private String demoUrl;

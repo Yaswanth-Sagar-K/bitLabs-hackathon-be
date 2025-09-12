@@ -16,7 +16,7 @@ public class HackathonController {
 		this.service = service;
 	}
 
-	@GetMapping
+	@GetMapping("/getAll")
 	public List<Hackathon> list() {
 		return service.getAll();
 	}
