@@ -2,17 +2,29 @@ package com.talentstream.dto;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
+
 public class CreateHackathonRequest {
+	@NotNull
 	private Long creatorId;
+	
+	@NotNull
 	private String title;
+	
+	@NotNull
 	private String description;
+	
+	@NotNull
 	private String bannerUrl;
+	
+	@NotNull
 	private LocalDateTime startAt;
+	
+	@NotNull
 	private LocalDateTime endAt;
 	private String instructions;
 	private String eligibility;
 	private String allowedTechnologies;
-	private String prizes;
 	private String status;
 
 	public Long getCreatorId() {
@@ -85,14 +97,6 @@ public class CreateHackathonRequest {
 
 	public void setAllowedTechnologies(String allowedTechnologies) {
 		this.allowedTechnologies = allowedTechnologies;
-	}
-
-	public String getPrizes() {
-		return prizes;
-	}
-
-	public void setPrizes(String prizes) {
-		this.prizes = prizes;
 	}
 
 	public String getStatus() {

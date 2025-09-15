@@ -58,9 +58,6 @@ public class HackathonService {
 	        if (updated.getAllowedTechnologies() != null) {
 	            existing.setAllowedTechnologies(updated.getAllowedTechnologies());
 	        }
-	        if (updated.getPrizes() != null) {
-	            existing.setPrizes(updated.getPrizes());
-	        }
 	        if (updated.getStatus() != null) {
 	            existing.setStatus(updated.getStatus());
 	        }
@@ -69,7 +66,12 @@ public class HackathonService {
 	}
 
 
-	public void delete(Long id) {
-		repo.deleteById(id);
+	public boolean delete(Long id) {
+	    if (repo.existsById(id)) {
+	        repo.deleteById(id);
+	        return true;
+	    }
+	    return false;
 	}
+
 }

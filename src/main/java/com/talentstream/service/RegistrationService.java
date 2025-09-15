@@ -15,16 +15,18 @@ public class RegistrationService {
 		this.repo = repo;
 	}
 
-	public Registration register(Long hackathonId, Long userId, String eligibilitySnapshot) {
-		Optional<Registration> existing = repo.findByHackathonIdAndUserId(hackathonId, userId);
-		if (existing.isPresent())
-			return existing.get();
-		Registration r = new Registration();
-		r.setHackathonId(hackathonId);
-		r.setUserId(userId);
-		r.setEligibilitySnapshot(eligibilitySnapshot);
-		return repo.save(r);
+	public Optional<Registration> findByHackathonAndUser(Long hackathonId, Long userId) {
+	    return repo.findByHackathonIdAndUserId(hackathonId, userId);
 	}
+
+	public Registration register(Long hackathonId, Long userId, String eligibilitySnapshot) {
+	    Registration r = new Registration();
+	    r.setHackathonId(hackathonId);
+	    r.setUserId(userId);
+	    r.setEligibilitySnapshot(eligibilitySnapshot);
+	    return repo.save(r);
+	}
+
 
 	public List<Registration> listByHackathon(Long hackathonId) {
 		return repo.findByHackathonId(hackathonId);
