@@ -1,38 +1,54 @@
 package com.talentstream.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class CreateHackathonRequest {
 	@NotNull
-	private Long creatorId;
+	private Long recruiterId;
 	
+
+
 	@NotNull
+	@Size(min = 5, max = 100, message = "Title must be between 5 and 100 characters")
 	private String title;
 	
 	@NotNull
+	 @Size(min = 20, max = 1000, message = "Description must be between 20 and 1000 characters")
 	private String description;
 	
 	@NotNull
+	private String company;
+	
+
+
+	@NotNull
+	@Pattern(
+		    regexp = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))(\\?.*)?$)",
+		    message = "Banner URL must point to a valid image (jpg, jpeg, png, gif, bmp)"
+		)
 	private String bannerUrl;
 	
 	@NotNull
-	private LocalDateTime startAt;
+	private LocalDate startAt;
 	
 	@NotNull
-	private LocalDateTime endAt;
+	private LocalDate endAt;
 	private String instructions;
 	private String eligibility;
+	
+	@NotNull 
 	private String allowedTechnologies;
-	private String status;
 
-	public Long getCreatorId() {
-		return creatorId;
+	public Long getRecruiterId() {
+		return recruiterId;
 	}
 
-	public void setCreatorId(Long creatorId) {
-		this.creatorId = creatorId;
+	public void setRecruiterId(Long recruiterId) {
+		this.recruiterId = recruiterId;
 	}
 
 	public String getTitle() {
@@ -59,19 +75,19 @@ public class CreateHackathonRequest {
 		this.bannerUrl = bannerUrl;
 	}
 
-	public LocalDateTime getStartAt() {
+	public LocalDate getStartAt() {
 		return startAt;
 	}
 
-	public void setStartAt(LocalDateTime startAt) {
+	public void setStartAt(LocalDate startAt) {
 		this.startAt = startAt;
 	}
 
-	public LocalDateTime getEndAt() {
+	public LocalDate getEndAt() {
 		return endAt;
 	}
 
-	public void setEndAt(LocalDateTime endAt) {
+	public void setEndAt(LocalDate endAt) {
 		this.endAt = endAt;
 	}
 
@@ -98,12 +114,13 @@ public class CreateHackathonRequest {
 	public void setAllowedTechnologies(String allowedTechnologies) {
 		this.allowedTechnologies = allowedTechnologies;
 	}
-
-	public String getStatus() {
-		return status;
+	
+	public String getCompany() {
+		return company;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setCompany(String company) {
+		this.company = company;
 	}
+
 }

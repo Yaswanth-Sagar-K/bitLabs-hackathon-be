@@ -11,7 +11,6 @@ public class Registration {
 
 	private Long hackathonId;
 	private Long userId; 
-	private String eligibilitySnapshot;
 
 	public Registration() {
 	}
@@ -38,13 +37,5 @@ public class Registration {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	public String getEligibilitySnapshot() {
-		return eligibilitySnapshot;
-	}
-
-	public void setEligibilitySnapshot(String eligibilitySnapshot) {
-		this.eligibilitySnapshot = eligibilitySnapshot;
 	}
 }

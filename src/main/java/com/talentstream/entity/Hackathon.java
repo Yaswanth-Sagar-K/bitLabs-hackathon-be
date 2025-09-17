@@ -1,6 +1,8 @@
 package com.talentstream.entity;
 
 import javax.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,27 +12,53 @@ public class Hackathon {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Long creatorId;
+	private Long recruiterId;
 	
-	@Column(length = 1000)
+	@Column(length = 100)
 	private String title;
 	
-	@Column(length = 4000)
+	@Column(length = 1000)
 	private String description;
 	
 	private String bannerUrl;
-	private LocalDateTime startAt;
-	private LocalDateTime endAt;
+	private LocalDate startAt;
+	private LocalDate endAt;
+	private LocalDateTime createdAt = LocalDateTime.now();
 	
+	private String company;
+	
+
+
 	@Column(length = 2000)
 	private String instructions;
 	
 	private String eligibility;
 	private String allowedTechnologies;
-	private String prizes;
-	private String status;
+	 @Enumerated(EnumType.STRING)  
+	    private HackathonStatus status;
 
 	public Hackathon() {
+	}
+	@PrePersist
+    @PreUpdate
+    public void updateStatus() {
+        LocalDate now = LocalDate.now();
+        if (startAt != null && endAt != null) {
+            if (now.isBefore(startAt)) {
+                this.status = HackathonStatus.UPCOMING;
+            } else if ((now.isEqual(startAt) || now.isAfter(startAt)) && now.isBefore(endAt)) {
+                this.status = HackathonStatus.ACTIVE;
+            } else if (now.isAfter(endAt)) {
+                this.status = HackathonStatus.ENDED;
+            }
+        }
+    }
+	
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 
 	public Long getId() {
@@ -41,12 +69,11 @@ public class Hackathon {
 		this.id = id;
 	}
 
-	public Long getCreatorId() {
-		return creatorId;
+	public Long getRecruiterId() {
+		return recruiterId;
 	}
-
-	public void setCreatorId(Long creatorId) {
-		this.creatorId = creatorId;
+	public void setRecruiterId(Long recruiterId) {
+		this.recruiterId = recruiterId;
 	}
 
 	public String getTitle() {
@@ -73,19 +100,19 @@ public class Hackathon {
 		this.bannerUrl = bannerUrl;
 	}
 
-	public LocalDateTime getStartAt() {
+	public LocalDate getStartAt() {
 		return startAt;
 	}
 
-	public void setStartAt(LocalDateTime startAt) {
+	public void setStartAt(LocalDate startAt) {
 		this.startAt = startAt;
 	}
 
-	public LocalDateTime getEndAt() {
+	public LocalDate getEndAt() {
 		return endAt;
 	}
 
-	public void setEndAt(LocalDateTime endAt) {
+	public void setEndAt(LocalDate endAt) {
 		this.endAt = endAt;
 	}
 
@@ -113,19 +140,19 @@ public class Hackathon {
 		this.allowedTechnologies = allowedTechnologies;
 	}
 
-	public String getPrizes() {
-		return prizes;
-	}
 
-	public void setPrizes(String prizes) {
-		this.prizes = prizes;
-	}
-
-	public String getStatus() {
+	public HackathonStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(HackathonStatus status) {
 		this.status = status;
+	}
+	
+	public String getCompany() {
+		return company;
+	}
+	public void setCompany(String company) {
+		this.company = company;
 	}
 }

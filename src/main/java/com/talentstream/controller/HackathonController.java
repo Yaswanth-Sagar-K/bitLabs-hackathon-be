@@ -32,16 +32,16 @@ public class HackathonController {
 	}
 
 
-	@GetMapping("/{id}")
-	public ResponseEntity<?> get(@PathVariable Long id) {
+	@GetMapping("/{hackathonId}")
+	public ResponseEntity<?> get(@PathVariable Long hackathonId) {
 	    try {
-	        Optional<Hackathon> hackathonOpt = service.get(id);
+	        Optional<Hackathon> hackathonOpt = service.get(hackathonId);
 
 	        if (hackathonOpt.isPresent()) {
 	            return ResponseEntity.ok(hackathonOpt.get());
 	        } else {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                                 .body("No hackathon found with id: " + id);
+	                                 .body("No hackathon found with id: " + hackathonId);
 	        }
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

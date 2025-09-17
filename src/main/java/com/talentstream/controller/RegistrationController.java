@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/hackathons/{hackathonId}/registrations")
+@RequestMapping("/hackathons")
 @CrossOrigin
 public class RegistrationController {
     private final RegistrationService service;
@@ -28,7 +28,7 @@ public class RegistrationController {
     @Autowired
     public HackathonRepository hackRepo;
 
-    @PostMapping
+    @PostMapping("/{hackathonId}/register")
     public ResponseEntity<?> register(@PathVariable Long hackathonId, 
                                       @Valid @RequestBody RegisterRequest r) {
     	boolean exists = appRepo.existsById(r.getUserId());
@@ -48,7 +48,7 @@ public class RegistrationController {
                                      .body("User already registered for hackathon with id: " + hackathonId);
             }
 
-            Registration saved = service.register(hackathonId, r.getUserId(), r.getEligibility());
+            Registration saved = service.register(hackathonId, r.getUserId());
             return ResponseEntity.ok("User registered successfully with id: " + saved.getId());
 
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class RegistrationController {
     }
 
 
-    @GetMapping
+    @GetMapping("/{hackathonId}/getAllRegistrations")
     public ResponseEntity<?> list(@PathVariable Long hackathonId) {
         try {
             if (!hackRepo.existsById(hackathonId)) {

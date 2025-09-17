@@ -19,11 +19,10 @@ public class RegistrationService {
 	    return repo.findByHackathonIdAndUserId(hackathonId, userId);
 	}
 
-	public Registration register(Long hackathonId, Long userId, String eligibilitySnapshot) {
+	public Registration register(Long hackathonId, Long userId) {
 	    Registration r = new Registration();
 	    r.setHackathonId(hackathonId);
 	    r.setUserId(userId);
-	    r.setEligibilitySnapshot(eligibilitySnapshot);
 	    return repo.save(r);
 	}
 

@@ -68,7 +68,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/job/searchByMinimumQualification", "/job/recruiterssearchBySpecialization",
 						"/job/recruiterssearchBySkillNameAndExperience", "/team/{recruiterId}/team-members",
 						"/team/teammembers/{recruiterId}", "/team/{teamMemberId}",
-						"/team/{teamMemberId}/reset-password", "/job/recruiterscountjobs/{recruiterId}")
+						"/team/{teamMemberId}/reset-password", "/job/recruiterscountjobs/{recruiterId}",
+						"/api/recruiter/hackathons/create", "/api/recruiter/hackathons/get/{recruiterId}",
+						"/api/recruiter/hackathons/update/{hackathonId}", "/api/recruiter/hackathons/delete/{hackathonId}")
 				.hasAnyRole("JOBRECRUITER")
 				.antMatchers("/jobVisit/applicant/track-visit","/skill-badges/{id}/skill-badges","/skill-badges/save","/savedjob/applicants/deletejob/{applicantId}/{jobId}", "/applicant/{id}/profilestatus",
 						"/applicantprofile/{applicantId}/profile-view", "/applicantprofile/updateprofile/{applicantid}",
@@ -83,7 +85,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/applicant-pdf/{applicantId}/upload", "/applicant-image/{applicantId}/upload",
 						"/applicant/closeAccount/{id}",
 						"/applyjob/alert/delete/{alertsId}",
-						"/applicant-image/getphoto/{applicantId}")
+						"/applicant-image/getphoto/{applicantId}", "/api/hackathons/getAll", "/api/hackathons/{hackathonId}")
 				.hasAnyRole("JOBAPPLICANT")
 				.antMatchers("/resume/retryResumeRegistration","/resume/pdf/{id}", "/applicant/getApplicantById/{id}", "/send-message", "/health",
 						"/applicant/signOut", "/forgotpassword/recuriterverify-otp",
