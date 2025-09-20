@@ -1,97 +1,116 @@
 package com.talentstream.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "submissions", indexes = { @Index(columnList = "hackathonId"), @Index(columnList = "registrationId") })
+@Table(
+    name = "submissions",
+    indexes = {
+        @Index(columnList = "hackathonId"),
+        @Index(columnList = "registrationId")
+    }
+)
 public class Submission {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
-	private Long hackathonId;
-	private Long registrationId;
-	private String title;
-	@Column(length = 4000)
-	private String description;
-	private String repoUrl;
-	private String docUrl;
-	private String demoUrl;
-	@Column(length = 8000)
-	private String repoMetadataJson; 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public Submission() {
-	}
+    private Long hackathonId;
+    private Long registrationId;
 
-	public Long getId() {
-		return id;
-	}
+    private String projectTitle;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(length = 4000)
+    private String projectSummary;
 
-	public Long getHackathonId() {
-		return hackathonId;
-	}
+    @Column(length = 2000)
+    private String useCase;
 
-	public void setHackathonId(Long hackathonId) {
-		this.hackathonId = hackathonId;
-	}
+    @Column(length = 2000)
+    private String technologiesUsed;
 
-	public Long getRegistrationId() {
-		return registrationId;
-	}
+    private String githubLink;
+    private String demoLink;
 
-	public void setRegistrationId(Long registrationId) {
-		this.registrationId = registrationId;
-	}
+    private LocalDateTime submissionDate;
 
-	public String getTitle() {
-		return title;
-	}
+    public Submission() {}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    @PrePersist
+    protected void onCreate() {
+        this.submissionDate = LocalDateTime.now();
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    // --- Getters and Setters ---
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public Long getHackathonId() {
+        return hackathonId;
+    }
+    public void setHackathonId(Long hackathonId) {
+        this.hackathonId = hackathonId;
+    }
 
-	public String getRepoUrl() {
-		return repoUrl;
-	}
+    public Long getRegistrationId() {
+        return registrationId;
+    }
+    public void setRegistrationId(Long registrationId) {
+        this.registrationId = registrationId;
+    }
 
-	public void setRepoUrl(String repoUrl) {
-		this.repoUrl = repoUrl;
-	}
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
+    }
 
-	public String getDocUrl() {
-		return docUrl;
-	}
+    public String getProjectSummary() {
+        return projectSummary;
+    }
+    public void setProjectSummary(String projectSummary) {
+        this.projectSummary = projectSummary;
+    }
 
-	public void setDocUrl(String docUrl) {
-		this.docUrl = docUrl;
-	}
+    public String getUseCase() {
+        return useCase;
+    }
+    public void setUseCase(String useCase) {
+        this.useCase = useCase;
+    }
 
-	public String getDemoUrl() {
-		return demoUrl;
-	}
+    public String getTechnologiesUsed() {
+        return technologiesUsed;
+    }
+    public void setTechnologiesUsed(String technologiesUsed) {
+        this.technologiesUsed = technologiesUsed;
+    }
 
-	public void setDemoUrl(String demoUrl) {
-		this.demoUrl = demoUrl;
-	}
+    public String getGithubLink() {
+        return githubLink;
+    }
+    public void setGithubLink(String githubLink) {
+        this.githubLink = githubLink;
+    }
 
-	public String getRepoMetadataJson() {
-		return repoMetadataJson;
-	}
+    public String getDemoLink() {
+        return demoLink;
+    }
+    public void setDemoLink(String demoLink) {
+        this.demoLink = demoLink;
+    }
 
-	public void setRepoMetadataJson(String repoMetadataJson) {
-		this.repoMetadataJson = repoMetadataJson;
-	}
+    public LocalDateTime getSubmissionDate() {
+        return submissionDate;
+    }
+    public void setSubmissionDate(LocalDateTime submissionDate) {
+        this.submissionDate = submissionDate;
+    }
 }

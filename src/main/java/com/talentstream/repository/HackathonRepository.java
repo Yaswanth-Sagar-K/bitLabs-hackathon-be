@@ -10,4 +10,5 @@ import com.talentstream.entity.Hackathon;
 public interface HackathonRepository extends JpaRepository<Hackathon, Long> {
 	
 	public Optional<List<Hackathon>> findByRecruiterId(Long id);
+	Optional<Hackathon> findById(Long id);
 }

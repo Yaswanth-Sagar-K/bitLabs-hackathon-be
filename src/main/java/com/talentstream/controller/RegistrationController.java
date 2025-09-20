@@ -29,34 +29,23 @@ public class RegistrationController {
     public HackathonRepository hackRepo;
 
     @PostMapping("/{hackathonId}/register")
-    public ResponseEntity<?> register(@PathVariable Long hackathonId, 
+    public ResponseEntity<?> register(@PathVariable Long hackathonId,
                                       @Valid @RequestBody RegisterRequest r) {
-    	boolean exists = appRepo.existsById(r.getUserId());
-    	if(!exists) {
-    		 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                     .body("Applicant not found with id: " + r.getUserId());
-    	}
-    	if(!hackRepo.existsById(hackathonId)) {
-       	 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Hackathon not found with id: " + hackathonId);
-       }
         try {
-            Optional<Registration> existing = service.findByHackathonAndUser(hackathonId, r.getUserId());
-
-            if (existing.isPresent()) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                                     .body("User already registered for hackathon with id: " + hackathonId);
-            }
-
             Registration saved = service.register(hackathonId, r.getUserId());
             return ResponseEntity.ok("User registered successfully with id: " + saved.getId());
 
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("Error while registering user: " + e.getMessage());
+                    .body("Error while registering user: " + e.getMessage());
         }
     }
-
 
     @GetMapping("/{hackathonId}/getAllRegistrations")
     public ResponseEntity<?> list(@PathVariable Long hackathonId) {

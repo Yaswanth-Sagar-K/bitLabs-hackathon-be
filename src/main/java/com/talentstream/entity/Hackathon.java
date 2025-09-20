@@ -49,7 +49,7 @@ public class Hackathon {
             } else if ((now.isEqual(startAt) || now.isAfter(startAt)) && now.isBefore(endAt)) {
                 this.status = HackathonStatus.ACTIVE;
             } else if (now.isAfter(endAt)) {
-                this.status = HackathonStatus.ENDED;
+                this.status = HackathonStatus.COMPLETED;
             }
         }
     }

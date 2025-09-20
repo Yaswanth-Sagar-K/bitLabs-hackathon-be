@@ -32,7 +32,7 @@ public class HackathonStatusScheduler {
                  } else if ((now.isEqual(h.getStartAt()) || now.isAfter(h.getStartAt())) && now.isBefore(h.getEndAt())) {
                      h.setStatus(HackathonStatus.ACTIVE);
                  } else if (now.isAfter(h.getEndAt())) {
-                     h.setStatus(HackathonStatus.ENDED);
+                     h.setStatus(HackathonStatus.COMPLETED);
                  }
              }
          }

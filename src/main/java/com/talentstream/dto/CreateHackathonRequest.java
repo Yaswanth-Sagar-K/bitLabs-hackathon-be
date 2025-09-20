@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class CreateHackathonRequest {
 	@NotNull
 	private Long recruiterId;
@@ -21,6 +23,7 @@ public class CreateHackathonRequest {
 	private String description;
 	
 	@NotNull
+	@Size(min = 5, max = 100, message = "company name must be between 5 and 100 characters")
 	private String company;
 	
 
@@ -33,14 +36,17 @@ public class CreateHackathonRequest {
 	private String bannerUrl;
 	
 	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate startAt;
 	
 	@NotNull
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate endAt;
 	private String instructions;
 	private String eligibility;
 	
 	@NotNull 
+	@Size(min = 1, max = 100, message = "Give atleast one skill")
 	private String allowedTechnologies;
 
 	public Long getRecruiterId() {

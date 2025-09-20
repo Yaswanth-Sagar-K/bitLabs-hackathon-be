@@ -20,5 +20,7 @@ ApplicantProfile findByApplicantId(long applicantid);
 @Query("SELECT a FROM ApplicantProfile a JOIN FETCH a.skillsRequired WHERE a.applicant.id = :applicantId")
 Optional<ApplicantProfile> findByApplicantIdWithSkills(@Param("applicantId") long applicantId);
 
+Optional<ApplicantProfile> findByApplicantId(Long applicantId);
+
 
 }

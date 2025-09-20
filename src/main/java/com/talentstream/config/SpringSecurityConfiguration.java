@@ -70,7 +70,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/team/teammembers/{recruiterId}", "/team/{teamMemberId}",
 						"/team/{teamMemberId}/reset-password", "/job/recruiterscountjobs/{recruiterId}",
 						"/api/recruiter/hackathons/create", "/api/recruiter/hackathons/get/{recruiterId}",
-						"/api/recruiter/hackathons/update/{hackathonId}", "/api/recruiter/hackathons/delete/{hackathonId}")
+						"/api/recruiter/hackathons/update/{hackathonId}", "/api/recruiter/hackathons/delete/{hackathonId}",
+						"/api/hackathons/{hackathonId}/{candidateOrRecruiterId}")
 				.hasAnyRole("JOBRECRUITER")
 				.antMatchers("/jobVisit/applicant/track-visit","/skill-badges/{id}/skill-badges","/skill-badges/save","/savedjob/applicants/deletejob/{applicantId}/{jobId}", "/applicant/{id}/profilestatus",
 						"/applicantprofile/{applicantId}/profile-view", "/applicantprofile/updateprofile/{applicantid}",
@@ -85,7 +86,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/applicant-pdf/{applicantId}/upload", "/applicant-image/{applicantId}/upload",
 						"/applicant/closeAccount/{id}",
 						"/applyjob/alert/delete/{alertsId}",
-						"/applicant-image/getphoto/{applicantId}", "/api/hackathons/getAll", "/api/hackathons/{hackathonId}")
+						"/applicant-image/getphoto/{applicantId}", "/api/hackathons/getAll", "/api/hackathons/{hackathonId}/{candidateOrRecruiterId}",
+						"/api/hackathons/recommended/{applicantId}", "/api/hackathons/active", "/api/hackathons/upcoming",
+						"/api/hackathons/completed", "/hackathons/{hackathonId}/register", "/api/hackathons/applicant/{applicantId}")
 				.hasAnyRole("JOBAPPLICANT")
 				.antMatchers("/resume/retryResumeRegistration","/resume/pdf/{id}", "/applicant/getApplicantById/{id}", "/send-message", "/health",
 						"/applicant/signOut", "/forgotpassword/recuriterverify-otp",

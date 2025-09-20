@@ -1,6 +1,7 @@
 package com.talentstream.controller;
 
 import com.talentstream.dto.CreateHackathonRequest;
+import com.talentstream.dto.UpdateHackathonRequest;
 import com.talentstream.entity.Hackathon;
 import com.talentstream.repository.JobRecruiterRepository;
 import com.talentstream.service.HackathonService;
@@ -73,8 +74,11 @@ public class RecruiterController {
 
 	@PutMapping("update/{hackathonId}")
 	public ResponseEntity<?> updateHackathon(@PathVariable Long hackathonId,
-	                                         @Valid @RequestBody CreateHackathonRequest r) {
+	                                        @Valid @RequestBody UpdateHackathonRequest r) {
 	    try {
+	    	if(r.getRecruiterId() == null) {
+	    		 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("recruiter id should not be null");
+	    	}
 	        Hackathon updated = service.updateHackathon(hackathonId, r);
 	        return ResponseEntity.ok(updated);
 	    } catch (EntityNotFoundException e) {

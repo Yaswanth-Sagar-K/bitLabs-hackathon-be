@@ -1,30 +1,98 @@
 package com.talentstream.service;
 
 import com.talentstream.dto.CreateHackathonRequest;
+import com.talentstream.dto.UpdateHackathonRequest;
+import com.talentstream.entity.Applicant;
+import com.talentstream.entity.ApplicantProfile;
+import com.talentstream.entity.ApplicantSkills;
 import com.talentstream.entity.Hackathon;
+import com.talentstream.entity.HackathonStatus;
+import com.talentstream.entity.Registration;
+import com.talentstream.repository.ApplicantProfileRepository;
+import com.talentstream.repository.ApplicantRepository;
 import com.talentstream.repository.HackathonRepository;
 import com.talentstream.repository.JobRecruiterRepository;
+import com.talentstream.repository.RegistrationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 @Service
 public class HackathonService {
-	private final HackathonRepository repo;
 	@Autowired
 	private JobRecruiterRepository recruiterRepo;
+	
+	@Autowired
+    private ApplicantProfileRepository profileRepository;
+	
+	@Autowired
+	private RegistrationRepository registrationRepo;
+	
+	 @Autowired
+	    public ApplicantRepository appRepo;
 
 
+    private final HackathonRepository repo;
 	public HackathonService(HackathonRepository repo) {
 		this.repo = repo;
 	}
 
+	 public List<Hackathon> getRecommendedHackathons(Long applicantId) {
+        ApplicantProfile profile = profileRepository.findByApplicantId(applicantId)
+                .orElseThrow(() -> new RuntimeException("No applicant found with ID: " + applicantId));
+
+        Set<String> applicantSkills = profile.getSkillsRequired()
+                                             .stream()
+                                             .map(ApplicantSkills::getSkillName)
+                                             .collect(Collectors.toSet());
+
+        List<Hackathon> allHackathons = repo.findAll();
+
+        List<Hackathon> recommended = allHackathons.stream()
+        		.filter(h -> h.getStatus() == HackathonStatus.ACTIVE 
+                || h.getStatus() == HackathonStatus.UPCOMING)
+        	    .filter(h -> Arrays.stream(h.getAllowedTechnologies().split(",")) 
+        	                       .anyMatch(applicantSkills::contains))
+        	    .collect(Collectors.toList());
+
+        return recommended;
+    }
+	 
+	 public List<Hackathon> getActiveHackathons() {
+	        List<Hackathon> allHackathons = repo.findAll();
+
+	        return allHackathons.stream()
+	                .filter(h -> h.getStatus() == HackathonStatus.ACTIVE)
+	                .collect(Collectors.toList());
+	    }
+	 
+	 public List<Hackathon> getUpcomingHackathons() {
+	        List<Hackathon> allHackathons = repo.findAll();
+
+	        return allHackathons.stream()
+	                .filter(h -> h.getStatus() == HackathonStatus.UPCOMING)
+	                .collect(Collectors.toList());
+	    }
+	 
+	 public List<Hackathon> getCompletedHackathons() {
+	        List<Hackathon> allHackathons = repo.findAll();
+
+	        return allHackathons.stream()
+	                .filter(h -> h.getStatus() == HackathonStatus.COMPLETED)
+	                .collect(Collectors.toList());
+	    }
+	 
+	 
 	public Hackathon createHackathon(CreateHackathonRequest r) {
         if (!recruiterRepo.existsById(r.getRecruiterId())) {
             throw new EntityNotFoundException("Recruiter not found with id: " + r.getRecruiterId());
@@ -35,7 +103,7 @@ public class HackathonService {
         if (r.getStartAt().isBefore(today)) {
             throw new IllegalArgumentException("Start date must be greater than today's date");
         }
-        if (r.getEndAt().isBefore(r.getStartAt())) {
+        if (!r.getEndAt().isAfter(r.getStartAt()))  {
             throw new IllegalArgumentException("End date must be greater than start date");
         }
 
@@ -59,14 +127,25 @@ public class HackathonService {
 	}
 	
 	public List<Hackathon> getAll(){
-		return repo.findAll();
+		List<Hackathon> allHackathons = repo.findAll();
+
+        return allHackathons.stream()
+                .filter(h -> h.getStatus() == HackathonStatus.ACTIVE || h.getStatus() == HackathonStatus.UPCOMING)
+                .collect(Collectors.toList());
 	}
 
-	public Optional<Hackathon> get(Long id) {
-		return repo.findById(id);
+	public Optional<Hackathon> get(Long hackId, Long userId) {
+	    boolean applicantExists = appRepo.existsById(userId);
+	    boolean recruiterExists = recruiterRepo.existsById(userId);
+	    
+	    if(!applicantExists && !recruiterExists) {
+	    	throw new EntityNotFoundException("candidate or recruiter is not found with the id" + userId);
+	    }
+
+		return repo.findById(hackId);
 	}
 
-	 public Hackathon updateHackathon(Long id, CreateHackathonRequest r) {
+	 public Hackathon updateHackathon(Long id, UpdateHackathonRequest r) {
 	        Hackathon existing = repo.findById(id)
 	                .orElseThrow(() -> new EntityNotFoundException("No hackathon found with id: " + id));
 
@@ -79,10 +158,7 @@ public class HackathonService {
 	        if (r.getStartAt() != null && r.getStartAt().isBefore(today)) {
 	            throw new IllegalArgumentException("Start date must be greater than today's date");
 	        }
-	        if (r.getStartAt() != null && r.getEndAt() != null && r.getEndAt().isBefore(r.getStartAt())) {
-	            throw new IllegalArgumentException("End date must be greater than start date");
-	        }
-	        if (r.getEndAt() != null && r.getStartAt() == null && r.getEndAt().isBefore(existing.getStartAt())) {
+	        if (r.getEndAt() != null && !r.getEndAt().isAfter(r.getStartAt()))  {
 	            throw new IllegalArgumentException("End date must be greater than start date");
 	        }
 
@@ -99,12 +175,29 @@ public class HackathonService {
 	        return repo.save(existing);
 	    }
 
+	 @Transactional
 	public boolean delete(Long id) {
 	    if (repo.existsById(id)) {
+	    	 registrationRepo.deleteByHackathonId(id);
 	        repo.deleteById(id);
 	        return true;
 	    }
 	    return false;
 	}
+	 
+	 public List<Hackathon> getRegisteredHackathons(Long applicantId) {
+		    if (!appRepo.existsById(applicantId)) {
+		        throw new IllegalArgumentException("Applicant not found with id: " + applicantId);
+		    }
+
+		    List<Registration> registrations = registrationRepo.findByUserId(applicantId);
+
+		    return registrations.stream()
+		            .map((Registration r) -> repo.findById(r.getHackathonId())) // explicitly type
+		            .filter((Optional<Hackathon> o) -> o.isPresent())
+		            .map((Optional<Hackathon> o) -> o.get())
+		            .collect(Collectors.toList());
+		}
+
 
 }

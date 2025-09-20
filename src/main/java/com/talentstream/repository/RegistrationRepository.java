@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
     List<Registration> findByHackathonId(Long hackathonId);
     Optional<Registration> findByHackathonIdAndUserId(Long hackathonId, Long userId);
+    void deleteByHackathonId(Long hackathonId);
+    List<Registration> findByUserId(Long userId);
 }

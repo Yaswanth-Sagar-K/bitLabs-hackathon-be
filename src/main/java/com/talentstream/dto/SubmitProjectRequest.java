@@ -1,59 +1,81 @@
 package com.talentstream.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class SubmitProjectRequest {
-	private Long registrationId;
-	private String title;
-	private String description;
-	private String repoUrl;
-	private String docUrl;
-	private String demoUrl;
 
-	public Long getRegistrationId() {
-		return registrationId;
-	}
+    @NotNull(message = "Registration ID is required")
+    private Long registrationId;
 
-	public void setRegistrationId(Long registrationId) {
-		this.registrationId = registrationId;
-	}
+    @NotBlank(message = "Project title cannot be empty")
+    @Size(min = 5, max = 255, message = "Project title must be between 5 and 255 characters")
+    private String projectTitle;
 
-	public String getTitle() {
-		return title;
-	}
+    @NotBlank(message = "Project summary cannot be empty")
+    @Size(min = 5, max = 4000, message = "Project summary must be between 5 and 4000 characters")
+    private String projectSummary;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    @NotBlank(message = "Use case cannot be empty")
+    @Size(min = 5, max = 2000, message = "Use case must be between 5 and 2000 characters")
+    private String useCase;
 
-	public String getDescription() {
-		return description;
-	}
+    @NotBlank(message = "Technologies used cannot be empty")
+    @Size(min = 5, max = 2000, message = "Technologies used must be between 5 and 2000 characters")
+    private String technologiesUsed;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    @NotBlank(message = "GitHub repository link is required")
+    private String githubLink;
 
-	public String getRepoUrl() {
-		return repoUrl;
-	}
+    private String demoLink;
 
-	public void setRepoUrl(String repoUrl) {
-		this.repoUrl = repoUrl;
-	}
+    public Long getRegistrationId() {
+        return registrationId;
+    }
+    public void setRegistrationId(Long registrationId) {
+        this.registrationId = registrationId;
+    }
 
-	public String getDocUrl() {
-		return docUrl;
-	}
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
+    }
 
-	public void setDocUrl(String docUrl) {
-		this.docUrl = docUrl;
-	}
+    public String getProjectSummary() {
+        return projectSummary;
+    }
+    public void setProjectSummary(String projectSummary) {
+        this.projectSummary = projectSummary;
+    }
 
-	public String getDemoUrl() {
-		return demoUrl;
-	}
+    public String getUseCase() {
+        return useCase;
+    }
+    public void setUseCase(String useCase) {
+        this.useCase = useCase;
+    }
 
-	public void setDemoUrl(String demoUrl) {
-		this.demoUrl = demoUrl;
-	}
+    public String getTechnologiesUsed() {
+        return technologiesUsed;
+    }
+    public void setTechnologiesUsed(String technologiesUsed) {
+        this.technologiesUsed = technologiesUsed;
+    }
+
+    public String getGithubLink() {
+        return githubLink;
+    }
+    public void setGithubLink(String githubLink) {
+        this.githubLink = githubLink;
+    }
+
+    public String getDemoLink() {
+        return demoLink;
+    }
+    public void setDemoLink(String demoLink) {
+        this.demoLink = demoLink;
+    }
 }
