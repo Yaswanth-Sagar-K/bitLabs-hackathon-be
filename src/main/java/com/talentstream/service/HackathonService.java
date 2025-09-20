@@ -2,7 +2,6 @@ package com.talentstream.service;
 
 import com.talentstream.dto.CreateHackathonRequest;
 import com.talentstream.dto.UpdateHackathonRequest;
-import com.talentstream.entity.Applicant;
 import com.talentstream.entity.ApplicantProfile;
 import com.talentstream.entity.ApplicantSkills;
 import com.talentstream.entity.Hackathon;
@@ -48,9 +47,11 @@ public class HackathonService {
 	}
 
 	 public List<Hackathon> getRecommendedHackathons(Long applicantId) {
-        ApplicantProfile profile = profileRepository.findByApplicantId(applicantId)
-                .orElseThrow(() -> new RuntimeException("No applicant found with ID: " + applicantId));
-
+		 if (!appRepo.existsById(applicantId)) {
+		        throw new IllegalArgumentException("Applicant not found with id: " + applicantId);
+		    }
+        ApplicantProfile profile = profileRepository.findByApplicantId(applicantId);
+                
         Set<String> applicantSkills = profile.getSkillsRequired()
                                              .stream()
                                              .map(ApplicantSkills::getSkillName)

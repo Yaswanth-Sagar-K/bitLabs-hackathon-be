@@ -18,18 +18,21 @@ public class SubmissionService {
 	}
 
 	public Submission submit(Long hackathonId, SubmitProjectRequest req) {
-		String meta = gitHubService.fetchRepoMetadataJson(req.getRepoUrl());
-		Submission s = new Submission();
-		s.setHackathonId(hackathonId);
-		s.setRegistrationId(req.getRegistrationId());
-		s.setTitle(req.getTitle());
-		s.setDescription(req.getDescription());
-		s.setRepoUrl(req.getRepoUrl());
-		s.setDocUrl(req.getDocUrl());
-		s.setDemoUrl(req.getDemoUrl());
-		s.setRepoMetadataJson(meta);
-		return repo.save(s);
+
+	    Submission s = new Submission();
+	    s.setRegistrationId(req.getRegistrationId());
+
+	    s.setProjectTitle(req.getProjectTitle());
+	    s.setProjectSummary(req.getProjectSummary());
+	    s.setUseCase(req.getUseCase());
+	    s.setTechnologiesUsed(req.getTechnologiesUsed());
+	    s.setGithubLink(req.getGithubLink());
+	    s.setDemoLink(req.getDemoLink());
+
+
+	    return repo.save(s);
 	}
+
 
 	public List<Submission> listByHackathon(Long hackathonId) {
 		return repo.findByHackathonId(hackathonId);

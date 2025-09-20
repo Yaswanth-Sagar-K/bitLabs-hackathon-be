@@ -9,13 +9,14 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/hackathons/{hackathonId}/submissions")
+@RequestMapping("/api/hackathons/{hackathonId}")
 @CrossOrigin
 public class SubmissionController {
     private final SubmissionService service;
     public SubmissionController(SubmissionService service) { this.service = service; }
 
-    @PostMapping
+    
+    @PostMapping("/submit")
     public Submission submit(@PathVariable Long hackathonId, @Valid @RequestBody SubmitProjectRequest r) {
         return service.submit(hackathonId, r);
     }
