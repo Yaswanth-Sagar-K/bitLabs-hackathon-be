@@ -19,8 +19,10 @@ public class Submission {
 
     private Long hackathonId;
     private Long registrationId;
+    private Long userId;
 
-    private String projectTitle;
+   
+	private String projectTitle;
 
     @Column(length = 4000)
     private String projectSummary;
@@ -113,4 +115,11 @@ public class Submission {
     public void setSubmissionDate(LocalDateTime submissionDate) {
         this.submissionDate = submissionDate;
     }
+    public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 }

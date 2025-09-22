@@ -1,6 +1,5 @@
 package com.talentstream.controller;
 
-import com.talentstream.dto.RegisterRequest;
 import com.talentstream.entity.Registration;
 import com.talentstream.repository.ApplicantRepository;
 import com.talentstream.repository.HackathonRepository;
@@ -11,9 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/hackathons")
@@ -27,12 +24,42 @@ public class RegistrationController {
     
     @Autowired
     public HackathonRepository hackRepo;
+    
+    @GetMapping("/{hackathonId}/getRegistration/{applicantId}")
+    public ResponseEntity<?> getRegistraton(@PathVariable Long hackathonId, @PathVariable Long applicantId) {
+    	if(hackathonId == null) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hackathon id should not be null");
+    	}
+    	if(applicantId == null) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("applicant id should not be null");
+    	}
+    	try {
+    		Registration result = service.findByHackathonAndUser(hackathonId, applicantId);
+    		return ResponseEntity.ok(result);
+    	}
+    	catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 
-    @PostMapping("/{hackathonId}/register")
-    public ResponseEntity<?> register(@PathVariable Long hackathonId,
-                                      @Valid @RequestBody RegisterRequest r) {
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error while getting registration: " + e.getMessage());
+        }
+    	
+    }
+
+    @PostMapping("/{hackathonId}/register/{applicantId}")
+    public ResponseEntity<?> register(@PathVariable Long hackathonId, @PathVariable Long applicantId) {
+    	if(hackathonId == null) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hackathon id should not be null");
+    	}
+    	if(applicantId == null) {
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("applicant id should not be null");
+    	}
         try {
-            Registration saved = service.register(hackathonId, r.getUserId());
+            Registration saved = service.register(hackathonId, applicantId);
             return ResponseEntity.ok("User registered successfully with id: " + saved.getId());
 
         } catch (IllegalArgumentException e) {

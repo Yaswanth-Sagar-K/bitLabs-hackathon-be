@@ -29,10 +29,6 @@ public class CreateHackathonRequest {
 
 
 	@NotNull
-	@Pattern(
-		    regexp = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))(\\?.*)?$)",
-		    message = "Banner URL must point to a valid image (jpg, jpeg, png, gif, bmp)"
-		)
 	private String bannerUrl;
 	
 	@NotNull

@@ -1,15 +1,19 @@
 package com.talentstream.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class SubmitProjectRequest {
 
-    @NotNull(message = "Registration ID is required")
+    @NotNull
     private Long registrationId;
+    
+    @NotNull
+    private Long userId;
 
-    @NotBlank(message = "Project title cannot be empty")
+    
+	@NotBlank(message = "Project title cannot be empty")
     @Size(min = 5, max = 255, message = "Project title must be between 5 and 255 characters")
     private String projectTitle;
 
@@ -78,4 +82,11 @@ public class SubmitProjectRequest {
     public void setDemoLink(String demoLink) {
         this.demoLink = demoLink;
     }
+    
+    public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 }

@@ -27,8 +27,16 @@ public class RegistrationService {
 	 @Autowired
 	    public HackathonRepository hackRepo;
 
-	public Optional<Registration> findByHackathonAndUser(Long hackathonId, Long userId) {
-	    return repo.findByHackathonIdAndUserId(hackathonId, userId);
+	public Registration findByHackathonAndUser(Long hackathonId, Long userId) {
+		 if (!appRepo.existsById(userId)) {
+	            throw new IllegalArgumentException("Applicant not found with id: " + userId);
+	        }
+		 if (!hackRepo.existsById(hackathonId)) {
+	            throw new IllegalArgumentException("Hackathon not found with id: " + hackathonId);
+	        }
+		
+		Registration result = repo.findByHackathonIdAndUserId(hackathonId, userId).get();
+	    return result;
 	}
 
 	 public Registration register(Long hackathonId, Long userId) {
@@ -50,6 +58,8 @@ public class RegistrationService {
 	        Registration r = new Registration();
 	        r.setHackathonId(hackathonId);
 	        r.setUserId(userId);
+	        r.setRegistaratinStatus(true);
+	        r.setSubmitStatus(false);
 	        return repo.save(r);
 	    }
 

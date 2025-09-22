@@ -11,6 +11,9 @@ public class Registration {
 
 	private Long hackathonId;
 	private Long userId; 
+	private Boolean registrationStatus;
+	private Boolean submitStatus;
+	
 
 	public Registration() {
 	}
@@ -37,5 +40,21 @@ public class Registration {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+	
+	public Boolean isRegistaratinStatus() {
+		return registrationStatus;
+	}
+
+	public void setRegistaratinStatus(Boolean registaratinStatus) {
+		this.registrationStatus = registaratinStatus;
+	}
+
+	public Boolean isSubmitStatus() {
+		return submitStatus;
+	}
+
+	public void setSubmitStatus(Boolean submitStatus) {
+		this.submitStatus = submitStatus;
 	}
 }

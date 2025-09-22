@@ -20,10 +20,7 @@ public class UpdateHackathonRequest {
     @Size(min = 5, max = 100, message = "Company name must be between 5 and 100 characters")
     private String company;
 
-    @Pattern(
-        regexp = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))(\\?.*)?$)",
-        message = "Banner URL must point to a valid image (jpg, jpeg, png, gif, bmp)"
-    )
+
     private String bannerUrl;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
