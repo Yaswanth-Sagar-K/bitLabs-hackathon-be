@@ -1,17 +1,17 @@
 package com.talentstream.service;
 
-import com.talentstream.dto.CreateHackathonRequest;
-import com.talentstream.dto.UpdateHackathonRequest;
+import com.talentstream.dto.HackathonCreateRequestDTO;
+import com.talentstream.dto.HackathonUpdateDTO;
 import com.talentstream.entity.ApplicantProfile;
 import com.talentstream.entity.ApplicantSkills;
 import com.talentstream.entity.Hackathon;
 import com.talentstream.entity.HackathonStatus;
-import com.talentstream.entity.Registration;
+import com.talentstream.entity.HackathonRegister;
 import com.talentstream.repository.ApplicantProfileRepository;
 import com.talentstream.repository.ApplicantRepository;
 import com.talentstream.repository.HackathonRepository;
 import com.talentstream.repository.JobRecruiterRepository;
-import com.talentstream.repository.RegistrationRepository;
+import com.talentstream.repository.HackathonRegisterRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class HackathonService {
     private ApplicantProfileRepository profileRepository;
 	
 	@Autowired
-	private RegistrationRepository registrationRepo;
+	private HackathonRegisterRepository registrationRepo;
 	
 	 @Autowired
 	    public ApplicantRepository appRepo;
@@ -94,7 +94,7 @@ public class HackathonService {
 	    }
 	 
 	 
-	public Hackathon createHackathon(CreateHackathonRequest r) {
+	public Hackathon createHackathon(HackathonCreateRequestDTO r) {
         if (!recruiterRepo.existsById(r.getRecruiterId())) {
             throw new EntityNotFoundException("Recruiter not found with id: " + r.getRecruiterId());
         }
@@ -146,7 +146,7 @@ public class HackathonService {
 		return repo.findById(hackId);
 	}
 
-	 public Hackathon updateHackathon(Long id, UpdateHackathonRequest r) {
+	 public Hackathon updateHackathon(Long id, HackathonUpdateDTO r) {
 	        Hackathon existing = repo.findById(id)
 	                .orElseThrow(() -> new EntityNotFoundException("No hackathon found with id: " + id));
 
@@ -191,10 +191,10 @@ public class HackathonService {
 		        throw new IllegalArgumentException("Applicant not found with id: " + applicantId);
 		    }
 
-		    List<Registration> registrations = registrationRepo.findByUserId(applicantId);
+		    List<HackathonRegister> registrations = registrationRepo.findByUserId(applicantId);
 
 		    return registrations.stream()
-		            .map((Registration r) -> repo.findById(r.getHackathonId())) // explicitly type
+		            .map((HackathonRegister r) -> repo.findById(r.getHackathonId())) // explicitly type
 		            .filter((Optional<Hackathon> o) -> o.isPresent())
 		            .map((Optional<Hackathon> o) -> o.get())
 		            .collect(Collectors.toList());

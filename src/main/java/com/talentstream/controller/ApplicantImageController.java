@@ -1,17 +1,24 @@
 package com.talentstream.controller;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.talentstream.dto.HackathonWinnersDTO;
 import com.talentstream.exception.CustomException;
 import com.talentstream.exception.UnsupportedFileTypeException;
 import com.talentstream.service.ApplicantImageService;
@@ -49,5 +56,18 @@ public class ApplicantImageController {
     public ResponseEntity<Resource> getProfilePic1(@PathVariable long applicantId) throws IOException {
         return applicantImageService.getProfilePicByApplicantId(applicantId);
     }
-    
+	    
+	    @PostMapping("/hackathon/winners")
+	    public ResponseEntity<?> getProfiles(@RequestBody List<Long> applicantIds) {
+	        List<HackathonWinnersDTO> profiles = applicantImageService.getProfilesWithImages(applicantIds);
+
+	        if (profiles == null || profiles.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .body(Collections.singletonMap("error", "No profiles found for the given applicant IDs"));
+	        }
+
+	        return ResponseEntity.ok(profiles);
+	    }
+
+
 }

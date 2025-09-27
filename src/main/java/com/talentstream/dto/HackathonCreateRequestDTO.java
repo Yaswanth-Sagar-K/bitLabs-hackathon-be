@@ -3,12 +3,11 @@ package com.talentstream.dto;
 import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class CreateHackathonRequest {
+public class HackathonCreateRequestDTO {
 	@NotNull
 	private Long recruiterId;
 	

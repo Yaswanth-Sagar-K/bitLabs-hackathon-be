@@ -1,7 +1,7 @@
 package com.talentstream.controller;
 
-import com.talentstream.dto.CreateHackathonRequest;
-import com.talentstream.dto.UpdateHackathonRequest;
+import com.talentstream.dto.HackathonCreateRequestDTO;
+import com.talentstream.dto.HackathonUpdateDTO;
 import com.talentstream.entity.Hackathon;
 import com.talentstream.repository.JobRecruiterRepository;
 import com.talentstream.service.HackathonService;
@@ -20,18 +20,18 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/recruiter/hackathons")
 @CrossOrigin
-public class RecruiterController {
+public class HackathonRecruiterController {
 	private final HackathonService service;
 	
 	@Autowired
 	private JobRecruiterRepository recruiterRepo;
 
-	public RecruiterController(HackathonService service) {
+	public HackathonRecruiterController(HackathonService service) {
 		this.service = service;
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<?> createHackathon(@Valid @RequestBody CreateHackathonRequest r, BindingResult result) {
+	public ResponseEntity<?> createHackathon(@Valid @RequestBody HackathonCreateRequestDTO r, BindingResult result) {
 	    if (result.hasErrors()) {
 	        StringBuilder errors = new StringBuilder();
 	        result.getFieldErrors().forEach(err -> {
@@ -74,7 +74,7 @@ public class RecruiterController {
 
 	@PutMapping("update/{hackathonId}")
 	public ResponseEntity<?> updateHackathon(@PathVariable Long hackathonId,
-	                                        @Valid @RequestBody UpdateHackathonRequest r) {
+	                                        @Valid @RequestBody HackathonUpdateDTO r) {
 	    try {
 	    	if(r.getRecruiterId() == null) {
 	    		 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("recruiter id should not be null");

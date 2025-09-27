@@ -12,9 +12,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
-public class ScoringController {
+public class HackathonScoreController {
     private final ScoringService service;
-    public ScoringController(ScoringService service) { this.service = service; }
+    public HackathonScoreController(ScoringService service) { this.service = service; }
 
     @PostMapping("/submissions/{submissionId}/score")
     public Score score(@PathVariable Long submissionId, @Valid @RequestBody ScoreRequest r, @RequestParam Long hackathonId) {

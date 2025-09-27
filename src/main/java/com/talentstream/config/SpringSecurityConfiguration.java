@@ -89,7 +89,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/applicant-image/getphoto/{applicantId}", "/api/hackathons/getAll", "/api/hackathons/{hackathonId}/{candidateOrRecruiterId}",
 						"/api/hackathons/recommended/{applicantId}", "/api/hackathons/active", "/api/hackathons/upcoming",
 						"/api/hackathons/completed", "/hackathons/{hackathonId}/register", "/api/hackathons/applicant/{applicantId}",
-						"/hackathons/{hackathonId}/register/{applicantId}", "/api/hackathons/{hackathonId}/submit")
+						"/hackathons/{hackathonId}/register/{applicantId}", "/api/hackathons/{hackathonId}/submit",
+						"/hackathons/applicant/{applicantId}/getAllRegistrations", "/applicant-image/hackathon/winners",
+						"/applicant-image/hackathon/winners")
 				.hasAnyRole("JOBAPPLICANT")
 				.antMatchers("/resume/retryResumeRegistration","/resume/pdf/{id}", "/applicant/getApplicantById/{id}", "/send-message", "/health",
 						"/applicant/signOut", "/forgotpassword/recuriterverify-otp",

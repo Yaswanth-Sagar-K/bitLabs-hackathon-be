@@ -26,8 +26,7 @@ public class Hackathon {
 	private LocalDateTime createdAt = LocalDateTime.now();
 	
 	private String company;
-	
-
+	private Long winner;
 
 	@Column(length = 2000)
 	private String instructions;
@@ -154,5 +153,12 @@ public class Hackathon {
 	}
 	public void setCompany(String company) {
 		this.company = company;
+	}
+	
+	public Long getWinner() {
+		return winner;
+	}
+	public void setWinner(Long winner) {
+		this.winner = winner;
 	}
 }

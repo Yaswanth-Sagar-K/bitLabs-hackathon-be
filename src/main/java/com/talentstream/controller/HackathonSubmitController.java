@@ -1,8 +1,8 @@
 package com.talentstream.controller;
 
-import com.talentstream.dto.SubmitProjectRequest;
-import com.talentstream.entity.Submission;
-import com.talentstream.service.SubmissionService;
+import com.talentstream.dto.HackathonSubmitRequestDTO;
+import com.talentstream.entity.HackathonSubmit;
+import com.talentstream.service.HackathonSubmitService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/hackathons/{hackathonId}")
 @CrossOrigin
-public class SubmissionController {
-    private final SubmissionService service;
-    public SubmissionController(SubmissionService service) { this.service = service; }
+public class HackathonSubmitController {
+    private final HackathonSubmitService service;
+    public HackathonSubmitController(HackathonSubmitService service) { this.service = service; }
 
     
     @PostMapping("/submit")
-    public ResponseEntity<?> submit(@PathVariable Long hackathonId, @Valid @RequestBody SubmitProjectRequest r, BindingResult result) {
+    public ResponseEntity<?> submit(@PathVariable Long hackathonId, @Valid @RequestBody HackathonSubmitRequestDTO r, BindingResult result) {
     	 if (result.hasErrors()) {
  	        StringBuilder errors = new StringBuilder();
  	        result.getFieldErrors().forEach(err -> {
@@ -34,7 +34,7 @@ public class SubmissionController {
  	        return ResponseEntity.badRequest().body(errors.toString());
  	    }
     	 try {
- 	        Submission saved = service.submit(hackathonId, r);
+ 	        HackathonSubmit saved = service.submit(hackathonId, r);
  	        return ResponseEntity.status(HttpStatus.CREATED)
  	                .body("submitted resonse successfully with id " + saved.getId());
  	    } catch (IllegalArgumentException e) {
@@ -48,5 +48,5 @@ public class SubmissionController {
     }
 
     @GetMapping
-    public List<Submission> list(@PathVariable Long hackathonId) { return service.listByHackathon(hackathonId); }
+    public List<HackathonSubmit> list(@PathVariable Long hackathonId) { return service.listByHackathon(hackathonId); }
 }

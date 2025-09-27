@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "registrations", indexes = { @Index(columnList = "hackathonId"), @Index(columnList = "userId") })
-public class Registration {
+public class HackathonRegister {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -15,7 +15,7 @@ public class Registration {
 	private Boolean submitStatus;
 	
 
-	public Registration() {
+	public HackathonRegister() {
 	}
 
 	public Long getId() {

@@ -1,38 +1,61 @@
-package com.talentstream.dto;
+package com.talentstream.entity;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
-public class SubmitProjectRequest {
+@Entity
+@Table(
+    name = "submissions",
+    indexes = {
+        @Index(columnList = "hackathonId"),
+        @Index(columnList = "registrationId")
+    }
+)
+public class HackathonSubmit {
 
-    @NotNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private Long hackathonId;
     private Long registrationId;
-    
-    @NotNull
     private Long userId;
 
-    
-	@NotBlank(message = "Project title cannot be empty")
-    @Size(min = 5, max = 255, message = "Project title must be between 5 and 255 characters")
-    private String projectTitle;
+   
+	private String projectTitle;
 
-    @NotBlank(message = "Project summary cannot be empty")
-    @Size(min = 5, max = 4000, message = "Project summary must be between 5 and 4000 characters")
+    @Column(length = 4000)
     private String projectSummary;
 
-    @NotBlank(message = "Use case cannot be empty")
-    @Size(min = 5, max = 2000, message = "Use case must be between 5 and 2000 characters")
-    private String useCase;
-
-    @NotBlank(message = "Technologies used cannot be empty")
-    @Size(min = 5, max = 2000, message = "Technologies used must be between 5 and 2000 characters")
+    @Column(length = 2000)
     private String technologiesUsed;
 
-    @NotBlank(message = "GitHub repository link is required")
     private String githubLink;
-
     private String demoLink;
+
+    private LocalDateTime submissionDate;
+
+    public HackathonSubmit() {}
+
+    @PrePersist
+    protected void onCreate() {
+        this.submissionDate = LocalDateTime.now();
+    }
+
+    // --- Getters and Setters ---
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getHackathonId() {
+        return hackathonId;
+    }
+    public void setHackathonId(Long hackathonId) {
+        this.hackathonId = hackathonId;
+    }
 
     public Long getRegistrationId() {
         return registrationId;
@@ -55,12 +78,6 @@ public class SubmitProjectRequest {
         this.projectSummary = projectSummary;
     }
 
-    public String getUseCase() {
-        return useCase;
-    }
-    public void setUseCase(String useCase) {
-        this.useCase = useCase;
-    }
 
     public String getTechnologiesUsed() {
         return technologiesUsed;
@@ -82,10 +99,17 @@ public class SubmitProjectRequest {
     public void setDemoLink(String demoLink) {
         this.demoLink = demoLink;
     }
-    
+
+    public LocalDateTime getSubmissionDate() {
+        return submissionDate;
+    }
+    public void setSubmissionDate(LocalDateTime submissionDate) {
+        this.submissionDate = submissionDate;
+    }
     public Long getUserId() {
 		return userId;
 	}
+
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}

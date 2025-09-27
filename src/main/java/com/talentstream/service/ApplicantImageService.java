@@ -17,21 +17,31 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.talentstream.AwsSecretsManagerUtil;
+import com.talentstream.dto.HackathonWinnersDTO;
 import com.talentstream.entity.Applicant;
+import com.talentstream.entity.ApplicantProfile;
 import com.talentstream.exception.CustomException;
 import com.talentstream.repository.ApplicantImageRepository;
+import com.talentstream.repository.ApplicantProfileRepository;
 import com.talentstream.repository.RegisterRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.core.io.InputStreamResource;
 
 @Service
@@ -44,6 +54,9 @@ public class ApplicantImageService {
 
 	@Autowired
 	private RegisterRepository applicantService;
+	
+	@Autowired
+	ApplicantProfileRepository applicantProfileRepository;
 
 	public ApplicantImageService() throws IOException {
 
@@ -164,5 +177,42 @@ public class ApplicantImageService {
 					.body(errorResource);
 		}
 	}
+	
+	public List<HackathonWinnersDTO> getProfilesWithImages(List<Long> applicantIds) {
+    List<HackathonWinnersDTO> result = new ArrayList<>();
+    AmazonS3 s3Client = initializeS3Client();
+
+    List<ApplicantProfile> profiles = applicantProfileRepository.findByApplicantIdIn(applicantIds);
+
+    for (ApplicantProfile profile : profiles) {
+        try {
+            Long applicantId = profile.getApplicant().getId(); 
+            String firstName = profile.getBasicDetails().getFirstName();
+            String lastName = profile.getBasicDetails().getLastName();
+
+            String objectKey = applicantId + ".jpg";
+            String imageUrl = null;
+
+            if (s3Client.doesObjectExist(bucketName, objectKey)) {
+                Date expiration = new Date(System.currentTimeMillis() + 1000 * 60 * 60); 
+
+                GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                        new GeneratePresignedUrlRequest(bucketName, objectKey)
+                                .withMethod(com.amazonaws.HttpMethod.GET)
+                                .withExpiration(expiration);
+
+                URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+                imageUrl = url.toString();
+            }
+
+            result.add(new HackathonWinnersDTO(applicantId, firstName, lastName, imageUrl));
+
+        } catch (Exception e) {
+            System.out.println("Error fetching applicant profile: " + e.getMessage());
+        }
+    }
+
+    return result;
+}
 
 }

@@ -2,10 +2,10 @@ package com.talentstream.service;
 
 import com.talentstream.entity.Hackathon;
 import com.talentstream.entity.HackathonStatus;
-import com.talentstream.entity.Registration;
+import com.talentstream.entity.HackathonRegister;
 import com.talentstream.repository.ApplicantRepository;
 import com.talentstream.repository.HackathonRepository;
-import com.talentstream.repository.RegistrationRepository;
+import com.talentstream.repository.HackathonRegisterRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RegistrationService {
-	private final RegistrationRepository repo;
+public class HackathonRegisterService {
+	private final HackathonRegisterRepository repo;
 
-	public RegistrationService(RegistrationRepository repo) {
+	public HackathonRegisterService(HackathonRegisterRepository repo) {
 		this.repo = repo;
 	}
 	
@@ -27,7 +27,7 @@ public class RegistrationService {
 	 @Autowired
 	    public HackathonRepository hackRepo;
 
-	public Registration findByHackathonAndUser(Long hackathonId, Long userId) {
+	public HackathonRegister findByHackathonAndUser(Long hackathonId, Long userId) {
 		 if (!appRepo.existsById(userId)) {
 	            throw new IllegalArgumentException("Applicant not found with id: " + userId);
 	        }
@@ -35,11 +35,11 @@ public class RegistrationService {
 	            throw new IllegalArgumentException("Hackathon not found with id: " + hackathonId);
 	        }
 		
-		Registration result = repo.findByHackathonIdAndUserId(hackathonId, userId).get();
+		HackathonRegister result = repo.findByHackathonIdAndUserId(hackathonId, userId).get();
 	    return result;
 	}
 
-	 public Registration register(Long hackathonId, Long userId) {
+	 public HackathonRegister register(Long hackathonId, Long userId) {
 	        if (!appRepo.existsById(userId)) {
 	            throw new IllegalArgumentException("Applicant not found with id: " + userId);
 	        }
@@ -50,12 +50,12 @@ public class RegistrationService {
 	            throw new IllegalStateException("Hackathon is already completed. Cannot register.");
 	        }
 
-	        Optional<Registration> existing = repo.findByHackathonIdAndUserId(hackathonId, userId);
+	        Optional<HackathonRegister> existing = repo.findByHackathonIdAndUserId(hackathonId, userId);
 	        if (existing.isPresent()) {
 	            throw new IllegalStateException("User already registered for hackathon with id: " + hackathonId);
 	        }
 
-	        Registration r = new Registration();
+	        HackathonRegister r = new HackathonRegister();
 	        r.setHackathonId(hackathonId);
 	        r.setUserId(userId);
 	        r.setRegistaratinStatus(true);
@@ -63,7 +63,11 @@ public class RegistrationService {
 	        return repo.save(r);
 	    }
 
-	public List<Registration> listByHackathon(Long hackathonId) {
+	public List<HackathonRegister> listByHackathon(Long hackathonId) {
 		return repo.findByHackathonId(hackathonId);
+	}
+	
+	public List<HackathonRegister> listByApplicant(Long applicantId) {
+		return repo.findByUserId(applicantId);
 	}
 }

@@ -1,5 +1,6 @@
 	package com.talentstream.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -17,6 +18,8 @@ ApplicantProfile findByApplicantId(long applicantid);
 
 @Query("SELECT a FROM ApplicantProfile a JOIN FETCH a.skillsRequired WHERE a.applicant.id = :applicantId")
 Optional<ApplicantProfile> findByApplicantIdWithSkills(@Param("applicantId") long applicantId);
+List<ApplicantProfile> findByApplicantIdIn(List<Long> applicantIds);
+
 
 
 }

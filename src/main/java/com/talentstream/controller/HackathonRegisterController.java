@@ -1,9 +1,9 @@
 package com.talentstream.controller;
 
-import com.talentstream.entity.Registration;
+import com.talentstream.entity.HackathonRegister;
 import com.talentstream.repository.ApplicantRepository;
 import com.talentstream.repository.HackathonRepository;
-import com.talentstream.service.RegistrationService;
+import com.talentstream.service.HackathonRegisterService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/hackathons")
 @CrossOrigin
-public class RegistrationController {
-    private final RegistrationService service;
-    public RegistrationController(RegistrationService service) { this.service = service; }
+public class HackathonRegisterController {
+    private final HackathonRegisterService service;
+    public HackathonRegisterController(HackathonRegisterService service) { this.service = service; }
     
     @Autowired
     public ApplicantRepository appRepo;
@@ -34,7 +34,7 @@ public class RegistrationController {
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("applicant id should not be null");
     	}
     	try {
-    		Registration result = service.findByHackathonAndUser(hackathonId, applicantId);
+    		HackathonRegister result = service.findByHackathonAndUser(hackathonId, applicantId);
     		return ResponseEntity.ok(result);
     	}
     	catch (IllegalArgumentException e) {
@@ -59,7 +59,7 @@ public class RegistrationController {
     		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("applicant id should not be null");
     	}
         try {
-            Registration saved = service.register(hackathonId, applicantId);
+            HackathonRegister saved = service.register(hackathonId, applicantId);
             return ResponseEntity.ok("User registered successfully with id: " + saved.getId());
 
         } catch (IllegalArgumentException e) {
@@ -82,7 +82,7 @@ public class RegistrationController {
                                      .body("Hackathon not found with id: " + hackathonId);
             }
 
-            List<Registration> registrations = service.listByHackathon(hackathonId);
+            List<HackathonRegister> registrations = service.listByHackathon(hackathonId);
 
             if (registrations.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.OK)
@@ -95,6 +95,29 @@ public class RegistrationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                  .body("Error while fetching registrations: " + e.getMessage());
         }
+    }
+        
+        @GetMapping("applicant/{applicantId}/getAllRegistrations")
+        public ResponseEntity<?> applicantRegisterList(@PathVariable Long applicantId) {
+            try {
+                if (!appRepo.existsById(applicantId)) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                         .body("Hackathon not found with id: " + applicantId);
+                }
+
+                List<HackathonRegister> registrations = service.listByApplicant(applicantId);
+
+                if (registrations.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.OK)
+                                         .body("No registrations present for applicant with id: " + applicantId);
+                }
+
+                return ResponseEntity.ok(registrations);
+
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                     .body("Error while fetching registrations: " + e.getMessage());
+            }
     }
 
 }
